@@ -2,11 +2,13 @@
 const express = require("express");
 const app = express();
 const port = 3000 || process.env.PORT;
+const mongoose = require("mongoose");
 const ejs = require("ejs");
 app.use(express.static("public"));
+require("dotenv").config();
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
-
+const connectDB = require("./db/connect");
 app.get("/", (req, res) => {
   res.render("home");
 });
@@ -17,6 +19,15 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
-app.listen(port, () => {
-  console.log(`server is listening on port ${port}`);
-});
+const spinServer = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI);
+    app.listen(port, () => {
+      console.log(`server is listening on port ${port}...`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+spinServer();
