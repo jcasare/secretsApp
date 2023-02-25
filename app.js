@@ -9,6 +9,7 @@ require("dotenv").config();
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 const connectDB = require("./db/connect");
+const encrypt = require("mongoose-encryption");
 app.get("/", (req, res) => {
   res.render("home");
 });

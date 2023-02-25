@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
+const encrypt = require("mongoose-encryption");
 const UserSchema = new mongoose.Schema(
   {
     email: {
@@ -28,4 +28,6 @@ UserSchema.methods.comparePassword = async function (inputPassword) {
   const isMatch = await bcrypt.compare(inputPassword, this.password);
   return isMatch;
 };
+
+UserSchema.plugin(encrypt, { secret: process.env.ENCRYPTION_SECRET });
 module.exports = mongoose.model("User", UserSchema);
